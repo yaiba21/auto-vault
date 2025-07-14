@@ -143,7 +143,7 @@
       const formData = new FormData(form);
 
       try {
-        const res = await fetch("https://YOUR_N8N_DOMAIN/webhook/organize-drive-files", {
+        const res = await fetch(form.action, {
           method: "POST",
           body: formData
         });
