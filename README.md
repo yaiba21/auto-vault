@@ -1,2 +1,0 @@
-# auto-vault
-my AutoVault
