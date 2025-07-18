@@ -92,7 +92,7 @@
 <body>
   <div class="upload-container">
     <h2>Upload Files to AI Organizer</h2>
-     <form id="uploadForm" action="https://app.magicflow.vn/webhook/organize-drive-files" method="POST" enctype="multipart/form-data">
+    <form id="uploadForm" action="https://app.magicflow.vn/webhook/organize-drive-files" method="POST" enctype="multipart/form-data">
       <div class="drop-area" id="dropArea">Drag & Drop Files Here or Click to Select</div>
       <input type="file" name="file" id="fileInput" required multiple />
       <div class="file-name" id="fileNameDisplay"></div>
@@ -102,11 +102,9 @@
   </div>
 
   <script>
-    const form = document.getElementById("uploadForm");
     const fileInput = document.getElementById("fileInput");
     const dropArea = document.getElementById("dropArea");
     const fileNameDisplay = document.getElementById("fileNameDisplay");
-    const msg = document.getElementById("responseMsg");
 
     dropArea.addEventListener("click", () => fileInput.click());
 
@@ -132,34 +130,6 @@
     fileInput.addEventListener("change", () => {
       if (fileInput.files.length) {
         fileNameDisplay.textContent = Array.from(fileInput.files).map(f => f.name).join(", ");
-      }
-    });
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      msg.textContent = "Uploading...";
-      msg.className = "message";
-
-      const formData = new FormData(form);
-
-      try {
-        const res = await fetch(form.action, {
-          method: "POST",
-          body: formData
-        });
-
-        if (!res.ok) throw new Error("Upload failed");
-
-        const result = await res.json();
-
-        msg.textContent = result.message || "Upload successful!";
-        msg.classList.add("success");
-
-        form.reset();
-        fileNameDisplay.textContent = "";
-      } catch (err) {
-        msg.textContent = "Upload failed. Please try again.";
-        msg.classList.add("error");
       }
     });
   </script>
