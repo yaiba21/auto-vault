@@ -105,6 +105,8 @@
     const fileInput = document.getElementById("fileInput");
     const dropArea = document.getElementById("dropArea");
     const fileNameDisplay = document.getElementById("fileNameDisplay");
+    const uploadForm = document.getElementById("uploadForm");
+    const responseMsg = document.getElementById("responseMsg");
 
     dropArea.addEventListener("click", () => fileInput.click());
 
@@ -130,6 +132,34 @@
     fileInput.addEventListener("change", () => {
       if (fileInput.files.length) {
         fileNameDisplay.textContent = Array.from(fileInput.files).map(f => f.name).join(", ");
+      }
+    });
+
+    uploadForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(uploadForm);
+
+      responseMsg.textContent = "Uploading...";
+      responseMsg.className = "message";
+
+      try {
+        const res = await fetch(uploadForm.action, {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.message === "Workflow was started") {
+          responseMsg.textContent = "✅ Upload successful! Workflow started.";
+          responseMsg.classList.add("success");
+        } else {
+          responseMsg.textContent = "❌ Upload error: " + (data.message || res.statusText);
+          responseMsg.classList.add("error");
+        }
+      } catch (err) {
+        responseMsg.textContent = "❌ Upload failed. Please try again.";
+        responseMsg.classList.add("error");
       }
     });
   </script>
